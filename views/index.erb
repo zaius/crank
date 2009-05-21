@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Laura Taylor Design</title>
+    <link href="styles.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="javascripts/jquery-ui-1.7.1.custom.css" media="screen" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="javascripts/jquery-dev.js"></script>
+    <script type="text/javascript" src="javascripts/jquery-ui-1.7.1.custom.min.js"></script>
+    <script type="text/javascript">                                         
+      $(document).ready(function() {
+
+          $("#save").click(function () {
+            var query = {};
+            var count = 0;
+            $(".image").each(function() {
+
+            query[count.toString() + '[]'] = [
+                $(this).find('img').attr('src'),
+                $(this).width(),
+                $(this).height(),
+                $(this).position().left,
+                $(this).position().top
+                ];
+                count++;
+              });
+
+            $.ajax({
+              url: 'save',
+              type: 'post',
+              data: query
+            });
+          });
+
+
+          currentSection = null;
+          currentLink = null;
+
+          $(".section .title").click(function () {
+            var oldSection = currentSection;
+            currentSection = $(this);
+
+            if (oldSection && currentSection[0] == oldSection[0]) return;
+
+            if (!oldSection) {
+              currentSection.next().slideDown("slow");
+            } else {
+              oldSection.next().slideUp("slow", function() {
+                currentSection.next().slideDown("slow");
+              });
+            }
+          });
+
+          $(".link a").click(function () {
+            var oldLink = currentLink;
+            currentLink = $(this);
+
+            if (oldLink && currentLink[0] == oldLink[0]) return;
+
+            $.ajax({url: "screen", cache: false, success: function(html){
+              $("#main").fadeOut("normal", function() {
+                $("#main").html(html);
+                $("#main").fadeIn("normal");
+
+                $(".image").draggable({
+                  grid: [10,10]
+                });
+
+                $(".image").resizable({
+                  aspectRatio : true,
+                  autoHide: true,
+                  grid: [10,10]
+                });
+
+              });
+            } });
+
+            if (oldLink) oldLink.css("color", "#93b2b6");
+            $(this).css("color", "#7e7e7e");
+
+            // Fix jump slidedowns by setting a height
+            currentLink.next().show();
+            var h = currentLink.next().height();
+            currentLink.next().hide();
+
+            if (!oldLink) {
+              currentLink.next().height(h).slideDown("slow");
+            } else {
+              oldLink.next().slideUp("slow", function() {
+                currentLink.next().height(h).slideDown("slow");
+                // Make sure the old one actually is hidden. This can happen
+                // when clicking a link in another section, then jumping back
+                oldLink.next().css('display', 'none');
+              });
+
+            }
+          });
+      });
+  </script> 
+  </head>
+
+<body>
+  <div id="content">
+    <div id="left">
+      <button id="save">save</button>
+      <img src="logo.png" id="logo" alt="logo" />
+      <div class="section">
+        <a href="#" onClick="return false;" class="title">print</a>
+        <div class="links">
+          <div class="link">
+            <a href="#" onClick="return false;">Paper Rocks Scissors For Multimedia</a>
+            <div class="description">
+              In the time of chimpanzees I was a monkey
+              Butane in my veins and I'm out to cut the junkie
+              With the plastic eyeballs, spray-paint the vegetables
+              Dog food stalls with the beefcake pantyhose
+              Kill the headlights and put it in neutral
+              Stock car flamin' with a loser and the cruise control
+              Baby's in reno with the vitamin d
+              Got a couple of couches
+            </div> 
+          </div>
+          <div class="link">
+            <a href="#" onClick="return false;">True Type Project</a>
+            <div class="description">
+              In the time of chimpanzees I was a monkey
+              Butane in my veins and I'm out to cut the junkie
+              With the plastic eyeballs, spray-paint the vegetables
+              Dog food stalls with the beefcake pantyhose
+              Kill the headlights and put it in neutral
+              Stock car flamin' with a loser and the cruise control
+              Baby's in reno with the vitamin d
+              Got a couple of couches
+            </div> 
+          </div>
+          <div class="link">
+            <a href="#" onClick="return false;">Unicorns + Ponies for Purple Rainbow Cars</a>
+            <div class="description">
+              In the time of chimpanzees I was a monkey
+              Butane in my veins and I'm out to cut the junkie
+              With the plastic eyeballs, spray-paint the vegetables
+              Dog food stalls with the beefcake pantyhose
+              Kill the headlights and put it in neutral
+              Stock car flamin' with a loser and the cruise control
+              Baby's in reno with the vitamin d
+              Got a couple of couches
+            </div> 
+          </div>
+          <div class="link">
+            <a href="#" onClick="return false;">Hot Pants and Glitter</a>
+            <div class="description">
+              In the time of chimpanzees I was a monkey
+              Butane in my veins and I'm out to cut the junkie
+              With the plastic eyeballs, spray-paint the vegetables
+              Dog food stalls with the beefcake pantyhose
+              Kill the headlights and put it in neutral
+              Stock car flamin' with a loser and the cruise control
+              Baby's in reno with the vitamin d
+              Got a couple of couches
+            </div> 
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <a href="#" onClick="return false;" class="title">blah</a>
+        <div class="links">
+          <div class="link">
+            <a href="#" onClick="return false;">Paper Rocks Scissors For Multimedia</a>
+            <div class="description">
+              In the time of chimpanzees I was a monkey
+              Butane in my veins and I'm out to cut the junkie
+              With the plastic eyeballs, spray-paint the vegetables
+              Dog food stalls with the beefcake pantyhose
+              Kill the headlights and put it in neutral
+              Stock car flamin' with a loser and the cruise control
+              Baby's in reno with the vitamin d
+              Got a couple of couches
+            </div> 
+          </div>
+          <div class="link">
+            <a href="#" onClick="return false;">True Type Project</a>
+            <div class="description">
+              In the time of chimpanzees I was a monkey
+              Butane in my veins and I'm out to cut the junkie
+              With the plastic eyeballs, spray-paint the vegetables
+              Dog food stalls with the beefcake pantyhose
+              Kill the headlights and put it in neutral
+              Stock car flamin' with a loser and the cruise control
+              Baby's in reno with the vitamin d
+              Got a couple of couches
+            </div> 
+          </div>
+          <div class="link">
+            <a href="#" onClick="return false;">Unicorns + Ponies for Purple Rainbow Cars</a>
+            <div class="description">
+              In the time of chimpanzees I was a monkey
+              Butane in my veins and I'm out to cut the junkie
+              With the plastic eyeballs, spray-paint the vegetables
+              Dog food stalls with the beefcake pantyhose
+              Kill the headlights and put it in neutral
+              Stock car flamin' with a loser and the cruise control
+              Baby's in reno with the vitamin d
+              Got a couple of couches
+            </div> 
+          </div>
+          <div class="link">
+            <a href="#" onClick="return false;">Hot Pants and Glitter</a>
+            <div class="description">
+              In the time of chimpanzees I was a monkey
+              Butane in my veins and I'm out to cut the junkie
+              With the plastic eyeballs, spray-paint the vegetables
+              Dog food stalls with the beefcake pantyhose
+              Kill the headlights and put it in neutral
+              Stock car flamin' with a loser and the cruise control
+              Baby's in reno with the vitamin d
+              Got a couple of couches
+            </div> 
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <a href="#" onClick="return false;" class="title">screen</a>
+      </div>
+      <div class="section">
+        <a href="#" onClick="return false;" class="title">play</a>
+      </div>
+      <div class="section">
+        <a href="#" onClick="return false;" class="title">profile</a>
+      </div>
+      <div class="section">
+        <a href="#" onClick="return false;" class="title">contact</a>
+      </div>
+    </div>
+
+  <div id="main">
+    <h1>facelift test</h1>
+
+    Laura's amazing fort polio!<br />
+    Main content goes here
+  </div>
+</div>
+</body>
+</html>
