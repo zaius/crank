@@ -3,70 +3,130 @@ require 'rubygems'
 require 'sinatra'
 require 'erb'
 require 'dm-core'
+# Use the helpers.rb file for authentication methods
+require 'helpers'
+
+set :app_file, __FILE__
+set :reload, true
+
+DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/content.db")
+
+class Image
+  include DataMapper::Resource
+  property :id,         Serial
+  property :page,       String
+  property :filename,   String
+  property :top,        Integer
+  property :left,       Integer
+  property :width,      Integer
+  property :height,     Integer
+  property :created_at, DateTime
+end
+
+DataMapper.auto_migrate!
+@editing = false
 
 get '/' do
-  erb :index
+  erb :main
 end
 
-get '/screen' do
-  output = ''
-  File.open("screen.txt", "r").each_line do |line|
-    # Strip required to get rid of the newlines
-    src, width, height, left, top = line.strip.split(',')
-    output << '<div class="image" style="' + 
-      'width: ' + width + 'px; height:' + height + 'px; ' + 
-      'position: absolute; left: ' + left + 'px; top: ' + top + 'px;' +
-      '"><img src="' + src + '" /></div>'
+get '/show/:page' do
+  @images = Image.all(:page => params[:page])
+
+  erb :images, :layout => !request.xhr?
+end
+
+get '/edit/:page' do
+  protected!
+
+  @page = params[:page]
+  refresh(@page) if needs_refresh?(@page)
+
+  @images = Image.all(:page => params[:page])
+  @editing = true
+  erb :images
+end
+
+post '/save/:page' do
+  protected!
+
+  # Delete all the old images and readd them because I'm lazy
+  Image.all(:page => params[:page]).destroy!
+
+  params[:images].each do |line|
+    line = line.split ','
+    attrs = {
+      :page => params[:page],
+      :filename => line[0].split('/').last,
+      :width => line[1],
+      :height => line[2],
+      :left => line[3],
+      :top => line[4]
+    }
+
+    Image.create(attrs)
+    # get imagemagick to resize all the images to their new sizes
+    `convert images/#{attrs[:page]}/#{attrs[:filename]} -resize '#{attrs[:width]}x#{attrs[:height]}' public/images/#{attrs[:page]}/#{attrs[:filename]}`
   end
 
-  return output
+  redirect '/admin'
 end
 
-post '/save' do
-  File.open('screen.txt', 'w') do |f|
-    params.values.each do |line|
-      f.print line.join(',') + "\n"
-    end
-  end
+get '/admin' do
+  protected!
 
-  return 'done'
+  @pages = Dir.entries("images").to_a.reject {|x| x.starts_with? '.'}
+  erb :admin
 end
 
-get '/refresh' do
-  directory = 'screen'
 
-  old_tracked_files = File.open(directory + '.txt', 'r').each_line.map { |line| line.split(',') }
-  directory_list = Dir.entries(directory).to_a
-  new_tracked_files = []
+
+# Checks if the images in the database are in sync with the images in the 
+# directory. This allows the user to add / remove files.
+def needs_refresh?(page)
+  images = Image.all(:page => page).map {|i| i.filename}
+  files  = Dir.entries("images/#{page}").to_a
+  images.sort != files.sort
+end
+
+def refresh(page)
+  images = Image.all(:page => page)
+  directory_list = Dir.entries("images/#{page}").to_a
+  directory_list -= ['.', '..']
 
   # delete references to any images that no longer exist
-  old_tracked_files.each do |line|
-    if directory_list.include? line[0]
-      new_tracked_files << line
+  images.each do |image|
+    unless directory_list.include? image.filename
+      image.delete
     end
   end
 
   # Add any new files
-  missing_files = directory_list - new_tracked_files.map{|file| file[0]}
-  missing_files.each do |file|
-    # TODO: only use image files
-    if file[0] == '.'[0]
-      next
-    end
+  new_files = directory_list - images.map {|i| i.filename}
+  new_files.each do |file|
+    # TODO: convert pdf files?
 
-    # Call imagemagick to get the size
-    # strip is required to get rid of the newlines
-    size = (`identify -format "%w,%h" #{directory}/#{file}`).strip.split(',')
-    new_tracked_files << [directory + '/' + file, size[0], size[1], 500, 500]
+    # If this is the first refresh, the image folder won't exist
+    out_dir = "./public/images/#{page}"
+    FileUtils.mkdir_p(out_dir) unless File.directory?(out_dir)
+
+    # any new files dropped in are probably going to be massive - reduce them
+    # to a more manageable size
+    `convert images/#{page}/#{file} -resize '600x450>' public/images/#{page}/#{file}`
+
+    # But, that doesn't return any size info to us. Need to call imagemagick
+    # again to check the actual size
+    # Strip is required to get rid of the console output's newline
+    width, height = (`identify -format "%w,%h" public/images/#{page}/#{file}`).strip.split(',')
+
+    Image.create!(
+      :page => page,
+      :filename => "#{file}",
+      :width => width,
+      :height => height,
+      :left => 500,
+      # TODO: put this below the lowest image
+      :top => 500
+    )
   end
-
-  # Write the new data out
-  File.open(directory + '.txt', 'w') do |f|
-    new_tracked_files.each do |line|
-      f.print line.join(',') + "\n"
-    end
-  end
-
-  # resize the files? what do i save filenames as?
-  'done'
 end

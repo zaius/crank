@@ -1,0 +1,12 @@
+<h1>Edit pages</h1>
+<ul>
+  <% @pages.each do |page| %>
+    <li>
+    <a href="edit/<%= page %>" /><%= page %></a>
+    </li>
+  <% end %>
+</ul>
+<p>
+  To add a page, create a new folder under the images directory and put some 
+  images in it. The page name will be the same as the directory name.
+</p>

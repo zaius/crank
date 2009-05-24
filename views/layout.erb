@@ -3,96 +3,98 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Laura Taylor Design</title>
-    <link href="styles.css" media="screen" rel="stylesheet" type="text/css" />
-    <link href="javascripts/jquery-ui-1.7.1.custom.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/styles.css" media="screen" rel="stylesheet" type="text/css" />
+    <script src="/javascripts/jquery-dev.js" type="text/javascript"></script>
+    
+    <% if @editing %>
+      <!-- only need jquery-ui for moving and resizing things. -->
+      <script src="/javascripts/jquery-ui-1.7.1.custom.min.js" type="text/javascript"></script>
+      <link href="/javascripts/jquery-ui-1.7.1.custom.css" media="screen" rel="stylesheet" type="text/css" />
+    <% end %>
 
-    <script type="text/javascript" src="javascripts/jquery-dev.js"></script>
-    <script type="text/javascript" src="javascripts/jquery-ui-1.7.1.custom.min.js"></script>
     <script type="text/javascript">                                         
       $(document).ready(function() {
 
+        <% if @editing %>
           $("#save").click(function () {
-            var query = {};
-            var count = 0;
-            $(".image").each(function() {
+            var query = new Array();
 
-            query[count.toString() + '[]'] = [
+            // Make a query with all the images' positions and sizes
+            $(".image").each(function() {
+              query.push([
                 $(this).find('img').attr('src'),
                 $(this).width(),
                 $(this).height(),
                 $(this).position().left,
                 $(this).position().top
-                ];
-                count++;
-              });
-
-            $.ajax({
-              url: 'save',
-              type: 'post',
-              data: query
+              ]);
             });
+
+            $.post('/save/<%= @page %>', {'images[]': query});
           });
 
+          $(".image").draggable({
+            grid: [10,10]
+          });
 
-          currentSection = null;
-          currentLink = null;
+          $(".image").resizable({
+            aspectRatio : true,
+            autoHide: true,
+            grid: [10,10]
+          });
+        <% end %>
 
-          $(".section .title").click(function () {
-            var oldSection = currentSection;
-            currentSection = $(this);
 
-            if (oldSection && currentSection[0] == oldSection[0]) return;
+        currentSection = null;
+        currentLink = null;
 
-            if (!oldSection) {
+        $(".section .title").click(function () {
+          var oldSection = currentSection;
+          currentSection = $(this);
+
+          if (oldSection && currentSection[0] == oldSection[0]) return;
+
+          if (!oldSection) {
+            currentSection.next().slideDown("slow");
+          } else {
+            oldSection.next().slideUp("slow", function() {
               currentSection.next().slideDown("slow");
-            } else {
-              oldSection.next().slideUp("slow", function() {
-                currentSection.next().slideDown("slow");
-              });
-            }
-          });
+            });
+          }
+        });
 
-          $(".link a").click(function () {
-            var oldLink = currentLink;
-            currentLink = $(this);
+        $(".link a").click(function () {
+          var oldLink = currentLink;
+          currentLink = $(this);
 
-            if (oldLink && currentLink[0] == oldLink[0]) return;
+          if (oldLink && currentLink[0] == oldLink[0]) return;
 
-            $.ajax({url: "screen", cache: false, success: function(html){
-              $("#main").fadeOut("normal", function() {
-                $("#main").html(html);
-                $("#main").fadeIn("normal");
+          $.ajax({url: "/show/screen", cache: false, success: function(html){
+            $("#main").fadeOut("normal", function() {
+              $("#main").html(html);
+              $("#main").fadeIn("normal");
 
-                $(".image").draggable({
-                  grid: [10,10]
-                });
 
-                $(".image").resizable({
-                  aspectRatio : true,
-                  autoHide: true,
-                  grid: [10,10]
-                });
+            });
+          } });
 
-              });
-            } });
+          if (oldLink) oldLink.css("color", "#93b2b6");
+          $(this).css("color", "#7e7e7e");
 
-            if (oldLink) oldLink.css("color", "#93b2b6");
-            $(this).css("color", "#7e7e7e");
+          // Fix jump slidedowns by setting a height
+          currentLink.next().show();
+          var h = currentLink.next().height();
+          currentLink.next().hide();
 
-            // Fix jump slidedowns by setting a height
-            currentLink.next().show();
-            var h = currentLink.next().height();
-            currentLink.next().hide();
-
-            if (!oldLink) {
+          if (!oldLink) {
+            currentLink.next().height(h).slideDown("slow");
+          } else {
+            oldLink.next().slideUp("slow", function() {
               currentLink.next().height(h).slideDown("slow");
-            } else {
-              oldLink.next().slideUp("slow", function() {
-                currentLink.next().height(h).slideDown("slow");
-                // Make sure the old one actually is hidden. This can happen
-                // when clicking a link in another section, then jumping back
-                oldLink.next().css('display', 'none');
-              });
+              // Make sure the old one actually is hidden. This can happen
+              // when clicking a link in another section, then jumping back
+              oldLink.next().css('display', 'none');
+            });
 
             }
           });
@@ -103,8 +105,11 @@
 <body>
   <div id="content">
     <div id="left">
-      <button id="save">save</button>
-      <img src="logo.png" id="logo" alt="logo" />
+      <% if @editing %>
+        <button style="position: absolute; top: 0; left: 0;" id="save">save</button>
+      <% end %>
+
+      <img src="/logo.png" id="logo" alt="logo" />
       <div class="section">
         <a href="#" onClick="return false;" class="title">print</a>
         <div class="links">
@@ -235,10 +240,7 @@
     </div>
 
   <div id="main">
-    <h1>facelift test</h1>
-
-    Laura's amazing fort polio!<br />
-    Main content goes here
+    <%= yield %>
   </div>
 </div>
 </body>
