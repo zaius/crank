@@ -15,6 +15,7 @@ class Image
   include DataMapper::Resource
   property :id,         Serial
   property :page,       String
+  property :original_filename,   String
   property :filename,   String
   property :top,        Integer
   property :left,       Integer
@@ -50,8 +51,6 @@ end
 post '/save/:page' do
   protected!
 
-  # Delete all the old images and readd them because I'm lazy
-  Image.all(:page => params[:page]).destroy!
 
   params[:images].each do |line|
     line = line.split ','
@@ -64,12 +63,14 @@ post '/save/:page' do
       :top => line[4]
     }
 
-    Image.create(attrs)
+    image = Image.first(:page => attrs[:page], :filename => attrs[:filename])
+    image.update_attributes(attrs)
+
     # get imagemagick to resize all the images to their new sizes
-    `convert images/#{attrs[:page]}/#{attrs[:filename]} -resize '#{attrs[:width]}x#{attrs[:height]}' public/images/#{attrs[:page]}/#{attrs[:filename]}`
+    `convert images/#{image.page}/#{image.original_filename} -resize '#{image.width}x#{image.height}' public/images/#{image.page}/#{image.filename}`
   end
 
-  redirect '/admin'
+  "done"
 end
 
 get '/admin' do
@@ -97,14 +98,20 @@ def refresh(page)
   # delete references to any images that no longer exist
   images.each do |image|
     unless directory_list.include? image.filename
-      image.delete
+      image.destroy
     end
   end
 
   # Add any new files
-  new_files = directory_list - images.map {|i| i.filename}
-  new_files.each do |file|
-    # TODO: convert pdf files?
+  new_files = directory_list - images.map {|i| i.original_filename}
+  new_files.each do |input_file|
+    # TODO: deal with multi page pdfs
+    if input_file.ends_with? '.pdf'
+      output_file = input_file[0..-4] + 'jpg'
+    else
+      output_file = input_file
+    end
+    
 
     # If this is the first refresh, the image folder won't exist
     out_dir = "./public/images/#{page}"
@@ -112,16 +119,17 @@ def refresh(page)
 
     # any new files dropped in are probably going to be massive - reduce them
     # to a more manageable size
-    `convert images/#{page}/#{file} -resize '600x450>' public/images/#{page}/#{file}`
+    `convert images/#{page}/#{input_file} -resize '600x450>' public/images/#{page}/#{output_file}`
 
     # But, that doesn't return any size info to us. Need to call imagemagick
     # again to check the actual size
     # Strip is required to get rid of the console output's newline
-    width, height = (`identify -format "%w,%h" public/images/#{page}/#{file}`).strip.split(',')
+    width, height = (`identify -format "%w,%h" public/images/#{page}/#{output_file}`).strip.split(',')
 
-    Image.create!(
+    Image.create(
       :page => page,
-      :filename => "#{file}",
+      :original_filename => "#{input_file}",
+      :filename => "#{output_file}",
       :width => width,
       :height => height,
       :left => 500,
