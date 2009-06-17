@@ -1,0 +1,2 @@
+class Flash < Element
+end

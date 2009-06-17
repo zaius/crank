@@ -1,0 +1,2 @@
+class Pdf < Element
+end
