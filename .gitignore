@@ -1,3 +1,3 @@
 *.db
-images/*
-public/images/*
+pages/*
+public/pages/*
