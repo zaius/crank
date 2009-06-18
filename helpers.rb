@@ -22,3 +22,13 @@ class String
     self[-suffix.length, suffix.length] == suffix      
   end
 end
+
+module Math
+  def self.max(a, b)
+    a > b ? a : b
+  end
+
+  def self.min(a, b)
+    a < b ? a : b
+  end
+end

@@ -1,4 +1,6 @@
 #!/usr/bin/ruby
+require 'rubygems'
+require 'sinatra'
 require 'environment'
 
 @editing = false
@@ -8,18 +10,21 @@ get '/' do
 end
 
 get '/show/:page' do
-  @elements = Element.all(:page => params[:page])
+  page = Page.get(params[:page])
+  @elements = page.elements
 
   erb :page, :layout => !request.xhr?
 end
 
 get '/edit/:page' do
   protected!
-
-  refresh params[:page]
-
-  @elements = Element.all(:page => params[:page])
   @editing = true
+
+  @page = Page.get(params[:page])
+  @page.refresh
+
+  @elements = @page.elements
+
   erb :page
 end
 
@@ -29,7 +34,7 @@ post '/save/:page' do
   params[:images].each do |line|
     line = line.split ','
 
-    id => line[0],
+    id = line[0]
     attrs = {
       :width => line[1],
       :height => line[2],
@@ -37,7 +42,7 @@ post '/save/:page' do
       :top => line[4]
     }
 
-    element = Element.find(id)
+    element = Element.get(id)
     element.update_attributes(attrs)
   end
 
@@ -49,5 +54,6 @@ get '/admin' do
 
   Page.refresh
   @pages = Page.all
+
   erb :admin
 end

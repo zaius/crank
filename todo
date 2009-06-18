@@ -4,3 +4,4 @@ x and y location
 saving spinner
 make database fields not null
 support rearranging text
+helpers for output filenames to make imagemagick calls nicer

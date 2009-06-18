@@ -2,7 +2,7 @@
 <ul>
   <% @pages.each do |page| %>
     <li>
-    <a href="edit/<%= page %>" /><%= page %></a>
+      <a href="edit/<%= page.name %>" /><%= page.name %></a>
     </li>
   <% end %>
 </ul>
