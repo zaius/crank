@@ -31,19 +31,17 @@ end
 post '/save/:page' do
   protected!
 
-  params[:images].each do |line|
+  params[:elements].each do |line|
     line = line.split ','
 
-    id = line[0]
-    attrs = {
-      :width => line[1],
-      :height => line[2],
-      :left => line[3],
-      :top => line[4]
-    }
+    e = Element.get line[0].split('_').last
 
-    element = Element.get(id)
-    element.update_attributes(attrs)
+    e.width = line[1]
+    e.height = line[2]
+    e.left = line[3]
+    e.top = line[4]
+
+    e.save!
   end
 
   "done"

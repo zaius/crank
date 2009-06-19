@@ -1,6 +1,7 @@
 class Textbox < Element
-  property :content, Text, :lazy => false
-
+  # The Content property is specific to this Textbox class, but it's causing
+  # no end of problems. See element.rb for more info.
+  #
   # Can't do not-null checks on the property because this is single table
   # inheritance, and it can't be enforced on other types. Therefore, have to
   # do model level checks.

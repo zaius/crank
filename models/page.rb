@@ -38,7 +38,6 @@ class Page
 
     # All remaining directories are new pages, insert them into the db
     new_pages.each do |d|
-      FileUtils.mkdir_p(d)
       p = Page.create!(:name => d)
       p.refresh
     end

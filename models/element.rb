@@ -11,6 +11,14 @@ class Element
   property :width,      Integer,  :nullable => false 
   property :height,     Integer,  :nullable => false 
 
+  # Datamapper is causing a bunch of bugs when I declare this in the Textbox
+  # model. Wasted a day on it already, so it's defined here until I can find
+  # a better solution.
+  # See bugs I've filed here:
+  # http://datamapper.lighthouseapp.com/projects/20609/tickets/910-sti-lazy-text-validation-bug#ticket-910-1
+  # http://datamapper.lighthouseapp.com/projects/20609-datamapper/tickets/911-sti-text-on-child-each-bug
+  property :content, Text, :lazy => false
+
   property :created_at, DateTime
   property :updated_at, DateTime
 

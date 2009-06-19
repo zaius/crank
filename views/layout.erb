@@ -22,7 +22,7 @@
             // Make a query with all the elements' positions and sizes
             $(".element").each(function() {
               query.push([
-                $(this).find('img').attr('src'),
+                $(this).attr('id'),
                 $(this).width(),
                 $(this).height(),
                 $(this).position().left,
