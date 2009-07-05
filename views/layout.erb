@@ -14,8 +14,11 @@
 
     <script type="text/javascript">                                         
       $(document).ready(function() {
-
         <% if @editing %>
+          $().mousemove(function(e){
+            $('#mouse_position').html(e.pageX +', '+ e.pageY);
+          }); 
+
           $("#save").click(function () {
             var query = new Array();
 
@@ -33,14 +36,45 @@
             $.post('/save/<%= @page.name %>', {'elements[]': query});
           });
 
+          // Functions for drag and resize events
+          change_start = function(event, ui) { $('#element_details').show(); };
+          change_stop  = function(event, ui) { $('#element_details').hide(); };
+          change = function(event, ui) { 
+              $('#element_size').html($(this).width().toString() + ',' + $(this).height().toString());
+              $('#element_position').html($(this).position().left.toString() + ',' + $(this).position().top.toString());
+          };
+
+          $('.element').addClass('editable');
+
           $(".element").draggable({
-            grid: [10,10]
+            grid: [10,10],
+            start: change_start,
+            stop: change_stop,
+            drag: change
           });
 
           $(".element").resizable({
-            aspectRatio : true,
             autoHide: true,
-            grid: [10,10]
+            aspectRatio: $('#aspect').attr("checked"),
+            start: change_start,
+            stop: change_stop,
+            resize: change
+          });
+
+
+          // Control resize aspect locking with aspect checkbox
+          $('#aspect').change(function () {
+            // Hackety hack. Due to bug http://dev.jqueryui.com/ticket/4186
+            // I can't change the aspect ratio after create. Instead, have to
+            // destroy and recreate the resizable.
+            $('.element').resizable('destroy');
+            $('.element').resizable({
+              autoHide: true,
+              aspectRatio: $(this).attr("checked"),
+              start: change_start,
+              stop: change_stop,
+              resize: change
+            });
           });
         <% end %>
 
@@ -73,8 +107,6 @@
             $("#main").fadeOut("normal", function() {
               $("#main").html(html);
               $("#main").fadeIn("normal");
-
-
             });
           } });
 
@@ -106,7 +138,15 @@
   <div id="content">
     <div id="left">
       <% if @editing %>
-        <button style="position: absolute; top: 0; left: 0;" id="save">save</button>
+        <div id="toolbox">
+          Position: <span id="mouse_position">0,0</span>
+          <label for="aspect">Lock aspect</label><input type="checkbox" id="aspect" checked="checked" />
+          <button id="save">save</button>
+          <div id="element_details" style="display: none;">
+            Top-left: <span id="element_position">0,0</span>
+            Size: <span id="element_size">0,0</span>
+          </div>
+        </div>
       <% end %>
 
       <img src="/logo.png" id="logo" alt="logo" />
