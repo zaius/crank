@@ -8,6 +8,7 @@ require 'dm-core'
 require 'dm-validations'
 
 DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/content.db")
+require 'models/element'
 Dir.glob('./models/*.rb').each {|f| require f }
 
 DataMapper.auto_upgrade!
