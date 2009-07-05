@@ -23,7 +23,7 @@ get '/edit/:page' do
   @page = Page.get(params[:page])
   @page.refresh
 
-  @elements = @page.elements
+  @elements = @page.reload.elements
 
   erb :page
 end

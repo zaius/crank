@@ -1,7 +1,8 @@
 generate smaller jqueryui
 make sure i'm using minimal jquery
-x and y location
 saving spinner
 make database fields not null
-support rearranging text
 helpers for output filenames to make imagemagick calls nicer
+check for jpeg/png/pdf support in imagemagick
+// support rearranging text
+// x and y location
