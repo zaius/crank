@@ -9,8 +9,6 @@ a {
 
 #content {
   padding-top: 30px;
-  overflow: auto;
-  border: 1px black solid;
 }
 
 #logo {
@@ -36,7 +34,6 @@ a {
   padding: 0px;
 }
 .link a {
-  _text-transform: uppercase;
   text-transform: lowercase;
   font-variant: small-caps;
   font-size: 10pt;

@@ -88,6 +88,13 @@
 
           if (oldSection && currentSection[0] == oldSection[0]) return;
 
+          $.ajax({url: "/show/" + $(this).html(), cache: false, success: function(html){
+            $("#main").fadeOut("normal", function() {
+              $("#main").html(html);
+              $("#main").fadeIn("normal");
+            });
+          } });
+
           if (!oldSection) {
             currentSection.next().slideDown("slow");
           } else {
@@ -102,13 +109,6 @@
           currentLink = $(this);
 
           if (oldLink && currentLink[0] == oldLink[0]) return;
-
-          $.ajax({url: "/show/screen", cache: false, success: function(html){
-            $("#main").fadeOut("normal", function() {
-              $("#main").html(html);
-              $("#main").fadeIn("normal");
-            });
-          } });
 
           if (oldLink) oldLink.css("color", "#93b2b6");
           $(this).css("color", "#7e7e7e");
@@ -150,133 +150,66 @@
       <% end %>
 
       <img src="/logo.png" id="logo" alt="logo" />
-      <div class="section">
-        <a href="#" onClick="return false;" class="title">print</a>
-        <div class="links">
-          <div class="link">
-            <a href="#" onClick="return false;">Paper Rocks Scissors For Multimedia</a>
-            <div class="description">
-              In the time of chimpanzees I was a monkey
-              Butane in my veins and I'm out to cut the junkie
-              With the plastic eyeballs, spray-paint the vegetables
-              Dog food stalls with the beefcake pantyhose
-              Kill the headlights and put it in neutral
-              Stock car flamin' with a loser and the cruise control
-              Baby's in reno with the vitamin d
-              Got a couple of couches
-            </div> 
-          </div>
-          <div class="link">
-            <a href="#" onClick="return false;">True Type Project</a>
-            <div class="description">
-              In the time of chimpanzees I was a monkey
-              Butane in my veins and I'm out to cut the junkie
-              With the plastic eyeballs, spray-paint the vegetables
-              Dog food stalls with the beefcake pantyhose
-              Kill the headlights and put it in neutral
-              Stock car flamin' with a loser and the cruise control
-              Baby's in reno with the vitamin d
-              Got a couple of couches
-            </div> 
-          </div>
-          <div class="link">
-            <a href="#" onClick="return false;">Unicorns + Ponies for Purple Rainbow Cars</a>
-            <div class="description">
-              In the time of chimpanzees I was a monkey
-              Butane in my veins and I'm out to cut the junkie
-              With the plastic eyeballs, spray-paint the vegetables
-              Dog food stalls with the beefcake pantyhose
-              Kill the headlights and put it in neutral
-              Stock car flamin' with a loser and the cruise control
-              Baby's in reno with the vitamin d
-              Got a couple of couches
-            </div> 
-          </div>
-          <div class="link">
-            <a href="#" onClick="return false;">Hot Pants and Glitter</a>
-            <div class="description">
-              In the time of chimpanzees I was a monkey
-              Butane in my veins and I'm out to cut the junkie
-              With the plastic eyeballs, spray-paint the vegetables
-              Dog food stalls with the beefcake pantyhose
-              Kill the headlights and put it in neutral
-              Stock car flamin' with a loser and the cruise control
-              Baby's in reno with the vitamin d
-              Got a couple of couches
-            </div> 
-          </div>
-        </div>
-      </div>
 
-      <div class="section">
-        <a href="#" onClick="return false;" class="title">blah</a>
-        <div class="links">
-          <div class="link">
-            <a href="#" onClick="return false;">Paper Rocks Scissors For Multimedia</a>
-            <div class="description">
-              In the time of chimpanzees I was a monkey
-              Butane in my veins and I'm out to cut the junkie
-              With the plastic eyeballs, spray-paint the vegetables
-              Dog food stalls with the beefcake pantyhose
-              Kill the headlights and put it in neutral
-              Stock car flamin' with a loser and the cruise control
-              Baby's in reno with the vitamin d
-              Got a couple of couches
-            </div> 
-          </div>
-          <div class="link">
-            <a href="#" onClick="return false;">True Type Project</a>
-            <div class="description">
-              In the time of chimpanzees I was a monkey
-              Butane in my veins and I'm out to cut the junkie
-              With the plastic eyeballs, spray-paint the vegetables
-              Dog food stalls with the beefcake pantyhose
-              Kill the headlights and put it in neutral
-              Stock car flamin' with a loser and the cruise control
-              Baby's in reno with the vitamin d
-              Got a couple of couches
-            </div> 
-          </div>
-          <div class="link">
-            <a href="#" onClick="return false;">Unicorns + Ponies for Purple Rainbow Cars</a>
-            <div class="description">
-              In the time of chimpanzees I was a monkey
-              Butane in my veins and I'm out to cut the junkie
-              With the plastic eyeballs, spray-paint the vegetables
-              Dog food stalls with the beefcake pantyhose
-              Kill the headlights and put it in neutral
-              Stock car flamin' with a loser and the cruise control
-              Baby's in reno with the vitamin d
-              Got a couple of couches
-            </div> 
-          </div>
-          <div class="link">
-            <a href="#" onClick="return false;">Hot Pants and Glitter</a>
-            <div class="description">
-              In the time of chimpanzees I was a monkey
-              Butane in my veins and I'm out to cut the junkie
-              With the plastic eyeballs, spray-paint the vegetables
-              Dog food stalls with the beefcake pantyhose
-              Kill the headlights and put it in neutral
-              Stock car flamin' with a loser and the cruise control
-              Baby's in reno with the vitamin d
-              Got a couple of couches
-            </div> 
+      <% @pages.each do |page| %>
+        <div class="section">
+          <a href="#" onClick="return false;" class="title"><%= page.name %></a>
+          <div class="links">
+            <div class="link">
+              <a href="#" onClick="return false;">Paper Rocks Scissors For Multimedia</a>
+              <div class="description">
+                In the time of chimpanzees I was a monkey
+                Butane in my veins and I'm out to cut the junkie
+                With the plastic eyeballs, spray-paint the vegetables
+                Dog food stalls with the beefcake pantyhose
+                Kill the headlights and put it in neutral
+                Stock car flamin' with a loser and the cruise control
+                Baby's in reno with the vitamin d
+                Got a couple of couches
+              </div> 
+            </div>
+            <div class="link">
+              <a href="#" onClick="return false;">True Type Project</a>
+              <div class="description">
+                In the time of chimpanzees I was a monkey
+                Butane in my veins and I'm out to cut the junkie
+                With the plastic eyeballs, spray-paint the vegetables
+                Dog food stalls with the beefcake pantyhose
+                Kill the headlights and put it in neutral
+                Stock car flamin' with a loser and the cruise control
+                Baby's in reno with the vitamin d
+                Got a couple of couches
+              </div> 
+            </div>
+            <div class="link">
+              <a href="#" onClick="return false;">Unicorns + Ponies for Purple Rainbow Cars</a>
+              <div class="description">
+                In the time of chimpanzees I was a monkey
+                Butane in my veins and I'm out to cut the junkie
+                With the plastic eyeballs, spray-paint the vegetables
+                Dog food stalls with the beefcake pantyhose
+                Kill the headlights and put it in neutral
+                Stock car flamin' with a loser and the cruise control
+                Baby's in reno with the vitamin d
+                Got a couple of couches
+              </div> 
+            </div>
+            <div class="link">
+              <a href="#" onClick="return false;">Hot Pants and Glitter</a>
+              <div class="description">
+                In the time of chimpanzees I was a monkey
+                Butane in my veins and I'm out to cut the junkie
+                With the plastic eyeballs, spray-paint the vegetables
+                Dog food stalls with the beefcake pantyhose
+                Kill the headlights and put it in neutral
+                Stock car flamin' with a loser and the cruise control
+                Baby's in reno with the vitamin d
+                Got a couple of couches
+              </div> 
+            </div>
           </div>
         </div>
-      </div>
-      <div class="section">
-        <a href="#" onClick="return false;" class="title">screen</a>
-      </div>
-      <div class="section">
-        <a href="#" onClick="return false;" class="title">play</a>
-      </div>
-      <div class="section">
-        <a href="#" onClick="return false;" class="title">profile</a>
-      </div>
-      <div class="section">
-        <a href="#" onClick="return false;" class="title">contact</a>
-      </div>
+      <% end %>
     </div>
 
   <div id="main">

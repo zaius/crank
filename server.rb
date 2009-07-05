@@ -5,6 +5,11 @@ require 'environment'
 
 @editing = false
 
+# Any menu needs a list of pages - load for all actions
+before do
+  @pages = Page.all
+end
+
 get '/' do
   erb :main
 end
@@ -52,7 +57,6 @@ get '/admin' do
   check_imagemagic_installed!
 
   Page.refresh
-  @pages = Page.all
 
   erb :admin
 end
