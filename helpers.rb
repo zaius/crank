@@ -9,6 +9,12 @@ helpers do
     @auth ||=  Rack::Auth::Basic::Request.new(request.env)
     @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['laura', 'people']
   end
+
+  def check_imagemagic_installed!
+    if `identify`.include? 'not found' or `convert`.include? 'not found' 
+      throw 'ImageMagick convert/identify not installed or not in path'
+    end
+  end
 end
 
 class String

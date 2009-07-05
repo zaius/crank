@@ -49,6 +49,7 @@ end
 
 get '/admin' do
   protected!
+  check_imagemagic_installed!
 
   Page.refresh
   @pages = Page.all
