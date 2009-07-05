@@ -52,7 +52,7 @@ class Page
   def add_new_elements
     new_elements = Dir.entries("pages/#{self.name}").to_a
     new_elements.delete_if { |f| f.starts_with? '.' }
-    new_elements.delete_if { |f| Element.all.map(&:filename).include? f }
+    new_elements.delete_if { |f| self.elements.map(&:filename).include? f }
     new_elements.each do |d|
       # Get the class required to handle this suffix
       c = Element.get_element_child_for_suffix d.split('.').last
