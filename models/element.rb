@@ -32,6 +32,7 @@ class Element
     @@suffix_mappings.each do |map|
       return map[:class] if map[:suffixes].include? suffix
     end
+    throw 'No handler for suffix: ' + suffix
   end
 
   protected
