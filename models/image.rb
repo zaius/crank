@@ -25,10 +25,13 @@ class Image < Element
     # something reasonable to start off with.
     # No need to call resize - it will get called because the width and 
     # height have changed.
-    if self.width > max_width and self.height > max_height
-      ratio = Math.min(self.width / max_width, self.height / max_height)
-      self.width *= ratio
-      self.height *= ratio
+    if self.width > max_width or self.height > max_height
+      # Calculate the ratio to multiply both width and height by that will end
+      # up with an image smaller than the maximum dimensions. Note that this
+      # must have floating point conversions, as ratio is always > 0 and < 1
+      ratio = Math.min(max_width.to_f / self.width, max_height.to_f / self.height)
+      self.width = (self.width * ratio).to_i
+      self.height = (self.height * ratio).to_i
     end
   end
 
