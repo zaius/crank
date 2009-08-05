@@ -38,3 +38,9 @@ module Math
     a < b ? a : b
   end
 end
+
+class Symbol
+  def to_proc
+    Proc.new { |*args| args.shift.__send__(self, *args) }
+  end
+end

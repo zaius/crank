@@ -30,13 +30,17 @@ class Element
 
   def self.get_element_child_for_suffix(suffix)
     @@suffix_mappings.each do |map|
-      return map[:class] if map[:suffixes].include? suffix
+      return map[:class] if map[:suffixes].include? suffix.downcase
     end
     throw 'No handler for suffix: ' + suffix
   end
 
   protected
   def self.register_suffixes(child_class, suffix_array)
-    @@suffix_mappings << {:class => child_class, :suffixes => suffix_array}
+    @@suffix_mappings << {
+      :class => child_class, 
+      # map trickery to get an array with every element downcased
+      :suffixes => suffix_array.map(&:downcase)
+    }
   end
 end
