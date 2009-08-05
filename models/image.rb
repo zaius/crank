@@ -4,7 +4,7 @@ class Image < Element
     resize if self.attribute_dirty? :width or self.attribute_dirty? :height
   end
 
-  Element.register_suffixes self, ['jpg', 'jpeg', 'gif', 'png']
+  Element.register_suffixes self, ['jpg', 'jpeg', 'gif', 'png', 'tif', 'tiff']
 
   def display_html
     "<img src=\"/pages/#{self.page.name}/#{self.filename}\" />"
