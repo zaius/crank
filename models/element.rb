@@ -10,6 +10,7 @@ class Element
   property :left,       Integer,  :nullable => false 
   property :width,      Integer,  :nullable => false 
   property :height,     Integer,  :nullable => false 
+  property :z_index,    Integer,  :nullable => false, :default => 0
 
   # Datamapper is causing a bunch of bugs when I declare this in the Textbox
   # model. Wasted a day on it already, so it's defined here until I can find

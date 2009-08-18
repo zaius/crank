@@ -45,6 +45,7 @@ post '/save/:page' do
     e.height = line[2]
     e.left = line[3]
     e.top = line[4]
+    e.z_index = line[5]
 
     e.save!
   end

@@ -61,12 +61,23 @@ a {
 .editable {
   border: 1px solid red;
 }
+.selected {
+  border: 2px solid blue;
+}
 #toolbox {
   z-index: 100;
   position: fixed;
   top: 0;
   right: 0;
-  width: 400px;
+  width: 200px;
   background-color: #eee;
   text-align: right;
+}
+#toolbox h1 {
+  background-color: #666;
+  color: white;
+  font-size: 12px;
+  text-align: center;
+  margin: 0;
+  padding: 2px;
 }

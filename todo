@@ -1,3 +1,4 @@
+fix border making elements positioned incorrectly, especially on selectable elements
 generate smaller jqueryui
 make sure i'm using minimal jquery
 saving spinner
