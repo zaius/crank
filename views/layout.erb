@@ -148,8 +148,8 @@
               return true;
             }
 
-            // Ignore all but backspace (8), digits, dash (45, for negatives)
-            if (e.which != 8 && e.which != 45 && (e.which < 48 || e.which > 57)) return false;
+            // Ignore all but backspace (8), digits, dash (45, for negatives), and arrow/direction keys (0)
+            if (e.which != 8 && e.which != 45 && e.which != 0 && (e.which < 48 || e.which > 57)) return false;
             return true;
           });
 
