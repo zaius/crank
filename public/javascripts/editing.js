@@ -1,18 +1,20 @@
+// position_changed is defined here so it can be used in both drag
+// and resize initializers
+var selected = null;
+var position_changed = function(event, ui) { 
+  $('#selected_x').val(selected.position().left);
+  $('#selected_y').val(selected.position().top);
+  $('#selected_w').val(selected.width());
+  $('#selected_h').val(selected.height());
+  $('#selected_z').val(selected.css('z-index'));
+};
+
 $(function() {
   $('.element').addClass('editable');
   select_element(null);
 
   // Functions for dragging and resizing elements 
   //
-  // position_changed is defined here so it can be used in both drag
-  // and resize initializers
-  var position_changed = function(event, ui) { 
-    $('#selected_x').val(selected.position().left);
-    $('#selected_y').val(selected.position().top);
-    $('#selected_w').val(selected.width());
-    $('#selected_h').val(selected.height());
-    $('#selected_z').val(selected.css('z-index'));
-  };
 
   $(".element").draggable({
     grid: [10,10],
@@ -29,7 +31,6 @@ $(function() {
 
 
   // Track selected element
-  var selected = null;
   function select_element(element) {
     if (selected) selected.removeClass('selected');
 

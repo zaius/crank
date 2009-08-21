@@ -7,3 +7,5 @@ helpers for output filenames to make imagemagick calls nicer
 check for jpeg/png/pdf support in imagemagick
 // support rearranging text
 // x and y location
+rtf handler
+file upload?
