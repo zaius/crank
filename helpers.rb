@@ -7,7 +7,7 @@ helpers do
 
   def authorized?
     @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['laura', 'people']
+    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['admin', 'people']
   end
 
   def check_imagemagic_installed!

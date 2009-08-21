@@ -1,0 +1,25 @@
+= crank - a website & portfolio layout tool
+Do you want to put some stuff up on a website and make it look pretty without
+having to learn a bunch of that css / html nerd speak?! Then crank is for you!
+
+With crank, you simply need to upload files to the pages directory and log in
+to the admin page. From there, you can drag and resize images from within the
+browser.
+
+== Extensibility
+Currently, crank can display images, pdfs, textboxes and flash files; however,
+it is simple to extend crank to display any type of file, in any manner you
+want. Simply register a filetype wth the Element class, and then define the
+html for displaying those file types. Examples are available in the models
+directory.
+
+== Dependencies
+- ruby
+- sinatra
+- imagemagick
+
+== License
+This code is licensed under the ISC license which lets you do pretty much
+whatever you want with it. Please see LICENSE.txt for the full text.
+
+Copyright (c) 2009 David Kelso - david at kelso dot id dot au
