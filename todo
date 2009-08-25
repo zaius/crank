@@ -9,3 +9,4 @@ check for jpeg/png/pdf support in imagemagick
 // x and y location
 rtf handler
 file upload?
+handle spaces in filenames

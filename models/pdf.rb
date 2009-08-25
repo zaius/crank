@@ -1,3 +1,5 @@
+require 'models/image'
+
 class Pdf < Image
   Element.register_suffixes self, ['pdf']
 

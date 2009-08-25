@@ -6,6 +6,14 @@ With crank, you simply need to upload files to the pages directory and log in
 to the admin page. From there, you can drag and resize images from within the
 browser.
 
+== Demo
+See a page created with crank here:
+http://crank.david.kelso.id.au
+And edit the page here:
+http://crank.david.kelso.id.au
+Username: admin
+Password: people
+
 == Extensibility
 Currently, crank can display images, pdfs, textboxes and flash files; however,
 it is simple to extend crank to display any type of file, in any manner you
@@ -14,9 +22,17 @@ html for displaying those file types. Examples are available in the models
 directory.
 
 == Dependencies
+crank is still early stage and hasn't had a lot of installs on different 
+environments. Please let me know of any issues and I can put runtime checks in
+for any problems.
+  
+Crank requires the following software to run:
+- unix based OS (could probably be ported to windows with a bit of effort)
 - ruby
-- sinatra
 - imagemagick
+- sinatra
+- datamapper
+- a database (sqlite works fine, postgres and mysql probably work too, but are untested)
 
 == License
 This code is licensed under the ISC license which lets you do pretty much
