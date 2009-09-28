@@ -8,10 +8,13 @@ browser.
 
 == Demo
 See a page created with crank here:
-http://crank.david.kelso.id.au
+http://crank.kelso.id.au
+
 And edit the page here:
-http://crank.david.kelso.id.au
+http://crank.kelso.id.au/admin
+
 Username: admin
+
 Password: people
 
 == Extensibility
