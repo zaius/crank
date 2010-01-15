@@ -1,7 +1,7 @@
 class Image < Element
   before :valid? do
     set_default_size_and_position if self.new?
-    resize if self.attribute_dirty? :width or self.attribute_dirty? :height
+    resize if self.attribute_dirty?(:width) or self.attribute_dirty?(:height)
   end
 
   Element.register_suffixes self, ['jpg', 'jpeg', 'gif', 'png', 'tif', 'tiff']

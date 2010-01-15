@@ -57,7 +57,6 @@ class Page
     new_elements.each do |d|
       # Get the class required to handle this suffix
       handler = Element.get_element_child_for_suffix d.split('.').last
-      puts self.inspect
       # Directly allocating the page object doesn't work. Have to fall back on 
       # to page name. It used to work in 0.9, but no longer in 0.10. I'm over 
       # DataMapper bug reports.

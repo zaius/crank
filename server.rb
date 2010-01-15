@@ -47,7 +47,8 @@ post '/save/:page' do
     e.top = line[4]
     e.z_index = line[5]
 
-    e.save!
+    e.save
+    raise "Error saving element: #{e.errors.inspect}" unless e.valid?
   end
 
   "done"
