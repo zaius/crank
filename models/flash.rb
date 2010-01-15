@@ -1,6 +1,6 @@
 class Flash < Element
-  before :save do
-    set_default_size_and_position if self.new_record?
+  before :valid? do
+    set_default_size_and_position if self.new?
     copy_file
   end
 

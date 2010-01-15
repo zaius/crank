@@ -7,8 +7,8 @@ class Textbox < Element
   # do model level checks.
   validates_present :content
 
-  before :save do
-    set_default_size_and_location if self.new_record?
+  before :valid? do
+    set_default_size_and_location if self.new?
     get_content_from_file
   end
 

@@ -1,7 +1,7 @@
 class Page
   include DataMapper::Resource
 
-  property :name, String, :key => true, :nullable => false 
+  property :name, String, :key => true, :required => true 
 
   has n, :elements
   has n, :images
@@ -38,7 +38,8 @@ class Page
 
     # All remaining directories are new pages, insert them into the db
     new_pages.each do |d|
-      p = Page.create!(:name => d)
+      p = Page.create(:name => d)
+      raise "Page save failed. Errors: " + p.errors.inspect unless p.valid?
       p.refresh
     end
   end
@@ -55,8 +56,15 @@ class Page
     new_elements.delete_if { |f| self.elements.map(&:filename).include? f }
     new_elements.each do |d|
       # Get the class required to handle this suffix
-      c = Element.get_element_child_for_suffix d.split('.').last
-      c.create!(:filename => d, :page => self)
+      handler = Element.get_element_child_for_suffix d.split('.').last
+      puts self.inspect
+      # Directly allocating the page object doesn't work. Have to fall back on 
+      # to page name. It used to work in 0.9, but no longer in 0.10. I'm over 
+      # DataMapper bug reports.
+      instance = handler.create(:filename => d, :page_name => self.name)
+      puts instance.inspect
+
+      raise "Save failed. Errors: " + instance.errors.inspect unless instance.valid?
     end
   end
 end

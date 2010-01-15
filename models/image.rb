@@ -1,6 +1,6 @@
 class Image < Element
-  before :save do
-    set_default_size_and_position if self.new_record?
+  before :valid? do
+    set_default_size_and_position if self.new?
     resize if self.attribute_dirty? :width or self.attribute_dirty? :height
   end
 

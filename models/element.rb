@@ -1,16 +1,16 @@
 class Element 
   include DataMapper::Resource
 
-  property :id,         Serial,   :nullable => false 
-  property :page_name,  String,   :nullable => false 
+  property :id,         Serial,   :required => true 
+  property :page_name,  String,   :required => true 
 
-  property :filename,   String,   :nullable => false 
+  property :filename,   String,   :required => true 
 
-  property :top,        Integer,  :nullable => false 
-  property :left,       Integer,  :nullable => false 
-  property :width,      Integer,  :nullable => false 
-  property :height,     Integer,  :nullable => false 
-  property :z_index,    Integer,  :nullable => false, :default => 0
+  property :top,        Integer,  :required => true 
+  property :left,       Integer,  :required => true 
+  property :width,      Integer,  :required => true 
+  property :height,     Integer,  :required => true 
+  property :z_index,    Integer,  :required => true, :default => 0
 
   # Datamapper is causing a bunch of bugs when I declare this in the Textbox
   # model. Wasted a day on it already, so it's defined here until I can find
