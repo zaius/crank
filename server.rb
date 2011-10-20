@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 require 'rubygems'
 require 'sinatra'
-require 'environment'
+require './environment'
 
 @editing = false
 

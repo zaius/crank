@@ -1,18 +1,19 @@
 #!/usr/bin/ruby
 require 'erb'
 # Use the helpers.rb file for authentication methods
-require 'helpers'
+require './helpers'
 
 # Connect to the DB, load up the models
 require 'dm-core'
 require 'dm-validations'
+require 'dm-migrations'
 
 DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/content.db")
-require 'models/page'
-require 'models/element'
-require 'models/image'
-require 'models/flash'
-require 'models/pdf'
-require 'models/textbox'
+require './models/page'
+require './models/element'
+require './models/image'
+require './models/flash'
+require './models/pdf'
+require './models/textbox'
 
 DataMapper.auto_upgrade!

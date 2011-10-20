@@ -21,7 +21,7 @@ class Textbox < Element
   private
 
   def get_content_from_file
-    self.content = File.open("pages/#{self.page.name}/#{self.filename}").collect.join
+    self.content = File.read "pages/#{self.page.name}/#{self.filename}"
   end
 
   def set_default_size_and_location
